@@ -1,0 +1,23 @@
+---
+- hosts: all
+  become: true
+  become_method: sudo
+
+  vars:
+    docker_users:
+    - ubuntu
+
+  roles:
+  - andrelohmann.docker
+
+  tasks:
+  - name: include all tasks
+    include: all.yml
+
+  - name: set default gateway
+    shell: |
+      route add default gw 192.168.50.11
+      route del default gw 10.0.2.2
+    args:
+      executable: /bin/bash
+...

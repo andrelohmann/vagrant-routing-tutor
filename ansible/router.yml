@@ -1,0 +1,11 @@
+---
+- name: activate ipv4 forwarding
+  lineinfile:
+    path: /etc/sysctl.conf
+    regexp: "^net.ipv4.ip_forward"
+    line: "net.ipv4.ip_forward=1"
+    state: present
+
+- name: activate forwarding
+  command: sysctl -p
+...

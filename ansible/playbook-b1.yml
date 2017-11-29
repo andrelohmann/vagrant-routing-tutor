@@ -1,0 +1,19 @@
+---
+- hosts: all
+  become: true
+  become_method: sudo
+
+  tasks:
+  - name: include all
+    include: all.yml
+
+  - name: include router
+    include: router.yml
+
+  - name: set default gateway
+    shell: |
+      route add default gw 192.168.70.11
+      route del default gw 10.0.2.2
+    args:
+      executable: /bin/bash
+...

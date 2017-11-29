@@ -1,0 +1,21 @@
+---
+- hosts: all
+  become: true
+  become_method: sudo
+
+  tasks:
+  - name: include all
+    include: all.yml
+
+  - name: include router
+    include: router.yml
+
+  - name: include internet gateway
+    include: gateway.yml
+
+  - name: add route for 192.168.60.0/24
+    shell: |
+      ip route add 192.168.60.0/24 via 192.168.70.12 dev enp0s9
+    args:
+      executable: /bin/bash
+...

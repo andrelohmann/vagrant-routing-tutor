@@ -1,0 +1,5 @@
+/.vagrant
+/ansible/roles
+.DS_Store
+*.retry
+*.log
