@@ -1,5 +1,5 @@
 ---
-- name: set forwarding and masquerading for the internet access for 192.168.50.0/24
+- name: set forwarding and masquerading for the internet access for 192.168.16.0/20
   shell: |
     iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE
     iptables -A FORWARD -i enp0s3 -o enp0s8 -m state --state RELATED,ESTABLISHED -j ACCEPT
@@ -7,7 +7,7 @@
   args:
     executable: /bin/bash
 
-- name: set forwarding and masquerading for the internet access for 192.168.70.0/24
+- name: set forwarding and masquerading for the internet access for 192.168.32.0/20
   shell: |
     iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE
     iptables -A FORWARD -i enp0s3 -o enp0s9 -m state --state RELATED,ESTABLISHED -j ACCEPT

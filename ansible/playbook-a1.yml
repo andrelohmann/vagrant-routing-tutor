@@ -13,9 +13,36 @@
   - name: include internet gateway
     include: gateway.yml
 
-  - name: add route for 192.168.60.0/24
-    shell: |
-      ip route add 192.168.60.0/24 via 192.168.70.12 dev enp0s9
+  # Route to network c
+  - name: read route
+    shell: "ip route show 192.168.48.0/20"
     args:
       executable: /bin/bash
+    register: _route
+
+  - name: add route for 192.168.48.0/20
+    command: ip route add 192.168.48.0/20 via 192.168.32.12 dev enp0s9
+    when: _route.stdout == ""
+
+  # Route to Docker networks on boxa2
+  - name: read route
+    shell: "ip route show 192.168.24.0/21"
+    args:
+      executable: /bin/bash
+    register: _route
+
+  - name: add route for 192.168.24.0/21
+    command: ip route add 192.168.24.0/21 via 192.168.16.12 dev enp0s8
+    when: _route.stdout == ""
+
+  # Route to Docker networks on boxb2
+  - name: read route
+    shell: "ip route show 192.168.56.0/21"
+    args:
+      executable: /bin/bash
+    register: _route
+
+  - name: add route for 192.168.56.0/21
+    command: ip route add 192.168.56.0/21 via 192.168.32.12 dev enp0s9
+    when: _route.stdout == ""
 ...

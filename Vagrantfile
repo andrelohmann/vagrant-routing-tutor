@@ -24,8 +24,8 @@ Vagrant.configure("2") do |config|
     #b.vm.synced_folder "docker-images", "/home/ubuntu/docker-images", create: true, owner: "ubuntu", group: "ubuntu", mount_options: ["dmode=777,fmode=777"]
     b.vbguest.auto_update = true
 
-    b.vm.network "private_network", ip: "192.168.50.11", virtualbox__intnet: "networka"
-    b.vm.network "private_network", ip: "192.168.70.11", virtualbox__intnet: "networkc"
+    b.vm.network "private_network", ip: "192.168.16.11", netmask: "255.255.240.0", virtualbox__intnet: "networka"
+    b.vm.network "private_network", ip: "192.168.32.11", netmask: "255.255.240.0", virtualbox__intnet: "networkb"
     b.vm.network "public_network", type: "dhcp", bridge: "en0: WLAN (AirPort)"
 
     b.vm.hostname = "boxa1.locala.dev"
@@ -47,10 +47,10 @@ Vagrant.configure("2") do |config|
     end
     b.vm.synced_folder ".", "/vagrant", disabled: true
     b.vm.synced_folder "ansible", "/vagrant/ansible", create: true, owner: "ubuntu", group: "ubuntu", mount_options: ["dmode=777,fmode=777"]
-    #b.vm.synced_folder "docker-images", "/home/ubuntu/docker-images", create: true, owner: "ubuntu", group: "ubuntu", mount_options: ["dmode=777,fmode=777"]
+    b.vm.synced_folder "docker-images", "/home/ubuntu/docker-images", create: true, owner: "ubuntu", group: "ubuntu", mount_options: ["dmode=777,fmode=777"]
     b.vbguest.auto_update = true
 
-    b.vm.network "private_network", ip: "192.168.50.12", virtualbox__intnet: "networka"
+    b.vm.network "private_network", ip: "192.168.16.12", netmask: "255.255.240.0", virtualbox__intnet: "networka"
     #b.vm.network "private_network", type: "dhcp"
     b.vm.hostname = "boxa2.locala.dev"
     #b.hostmanager.aliases = %w(node-1.local.dev)
@@ -75,8 +75,8 @@ Vagrant.configure("2") do |config|
     #b.vm.synced_folder "docker-images", "/home/ubuntu/docker-images", create: true, owner: "ubuntu", group: "ubuntu", mount_options: ["dmode=777,fmode=777"]
     b.vbguest.auto_update = true
 
-    b.vm.network "private_network", ip: "192.168.60.11", virtualbox__intnet: "networkb"
-    b.vm.network "private_network", ip: "192.168.70.12", virtualbox__intnet: "networkc"
+    b.vm.network "private_network", ip: "192.168.32.12", netmask: "255.255.240.0", virtualbox__intnet: "networkb"
+    b.vm.network "private_network", ip: "192.168.48.11", netmask: "255.255.240.0", virtualbox__intnet: "networkc"
     #b.vm.network "private_network", type: "dhcp"
     b.vm.hostname = "boxb1.localb.dev"
     #b.hostmanager.aliases = %w(node-1.local.dev)
@@ -97,10 +97,10 @@ Vagrant.configure("2") do |config|
     end
     b.vm.synced_folder ".", "/vagrant", disabled: true
     b.vm.synced_folder "ansible", "/vagrant/ansible", create: true, owner: "ubuntu", group: "ubuntu", mount_options: ["dmode=777,fmode=777"]
-    #b.vm.synced_folder "docker-images", "/home/ubuntu/docker-images", create: true, owner: "ubuntu", group: "ubuntu", mount_options: ["dmode=777,fmode=777"]
+    b.vm.synced_folder "docker-images", "/home/ubuntu/docker-images", create: true, owner: "ubuntu", group: "ubuntu", mount_options: ["dmode=777,fmode=777"]
     b.vbguest.auto_update = true
 
-    b.vm.network "private_network", ip: "192.168.60.12", virtualbox__intnet: "networkb"
+    b.vm.network "private_network", ip: "192.168.48.12", netmask: "255.255.240.0", virtualbox__intnet: "networkc"
     #b.vm.network "private_network", type: "dhcp"
     b.vm.hostname = "boxb2.localb.dev"
     #b.hostmanager.aliases = %w(node-1.local.dev)

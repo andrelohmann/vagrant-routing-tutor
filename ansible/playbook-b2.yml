@@ -14,10 +14,119 @@
   - name: include all tasks
     include: all.yml
 
-  - name: set default gateway
-    shell: |
-      route add default gw 192.168.60.11
-      route del default gw 10.0.2.2
+  - name: include router
+    include: router.yml
+
+  - name: read gateway
+    shell: "ip route | grep default | cut -d ' ' -f 3-3"
     args:
       executable: /bin/bash
+    register: _gateway
+
+  - block:
+    - name: delete default gw
+      command: route del default gw 10.0.2.2
+
+    - name: set new default gw
+      command: route add default gw 192.168.48.11
+
+    when: _gateway.stdout == "10.0.2.2"
+
+  - name: Build image and with buildargs
+    docker_image:
+     path: /home/ubuntu/docker-images/friendly
+     name: friendly
+
+  - name: create docker network
+    docker_network:
+      name: network_a
+      driver: bridge
+      ipam_options:
+        subnet: '172.56.0.0/24'
+        gateway: 172.56.0.1
+
+  - name: build virtual loopback ips
+    shell: |
+      ip addr add 192.168.56.11/24 dev lo label lo:0
+      ip addr add 192.168.56.12/24 dev lo label lo:1
+      ip addr add 192.168.56.13/24 dev lo label lo:2
+    args:
+      executable: /bin/bash
+
+  - name: Add container to network_a
+    docker_container:
+      name: docker_a_one
+      image: friendly
+      networks:
+      - name: network_a
+        ipv4_address: 172.56.0.11
+      ports:
+      - "192.168.56.11:80:80"
+
+  - name: Add container to network_a
+    docker_container:
+      name: docker_a_two
+      image: friendly
+      networks:
+      - name: network_a
+        ipv4_address: 172.56.0.12
+      ports:
+      - "192.168.56.12:80:80"
+
+  - name: Add container to network_a
+    docker_container:
+      name: docker_a_three
+      image: friendly
+      networks:
+      - name: network_a
+        ipv4_address: 172.56.0.13
+      ports:
+      - "192.168.56.13:80:80"
+
+  - name: create docker network
+    docker_network:
+      name: network_b
+      driver: bridge
+      ipam_options:
+        subnet: '172.60.0.0/24'
+        gateway: 172.60.0.1
+
+  - name: build virtual loopback ips
+    shell: |
+      ip addr add 192.168.60.11/24 dev lo label lo:3
+      ip addr add 192.168.60.12/24 dev lo label lo:4
+      ip addr add 192.168.60.13/24 dev lo label lo:5
+    args:
+      executable: /bin/bash
+
+  - name: Add container to network_b
+    docker_container:
+      name: docker_b_one
+      image: friendly
+      networks:
+      - name: network_b
+        ipv4_address: 172.60.0.11
+      ports:
+      - "192.168.60.11:80:80"
+
+  - name: Add container to network_b
+    docker_container:
+      name: docker_b_two
+      image: friendly
+      networks:
+      - name: network_b
+        ipv4_address: 172.60.0.12
+      ports:
+      - "192.168.60.12:80:80"
+
+  - name: Add container to network_b
+    docker_container:
+      name: docker_b_three
+      image: friendly
+      networks:
+      - name: network_b
+        ipv4_address: 172.60.0.13
+      ports:
+      - "192.168.60.13:80:80"
+
 ...

@@ -10,10 +10,28 @@
   - name: include router
     include: router.yml
 
-  - name: set default gateway
-    shell: |
-      route add default gw 192.168.70.11
-      route del default gw 10.0.2.2
+  - name: read gateway
+    shell: "ip route | grep default | cut -d ' ' -f 3-3"
     args:
       executable: /bin/bash
+    register: _gateway
+
+  - block:
+    - name: delete default gw
+      command: route del default gw 10.0.2.2
+
+    - name: set new default gw
+      command: route add default gw 192.168.32.11
+
+    when: _gateway.stdout == "10.0.2.2"
+
+  - name: read route
+    shell: "ip route show 192.168.56.0/20"
+    args:
+      executable: /bin/bash
+    register: _route
+
+  - name: add route for 192.168.56.0/20
+    command: ip route add 192.168.56.0/20 via 192.168.48.12 dev enp0s8
+    when: _route.stdout == ""
 ...
